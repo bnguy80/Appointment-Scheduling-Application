@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"schedule.schedule_2","l":"controller"},{"m":"schedule.schedule_2","l":"DAO"},{"m":"schedule.schedule_2","l":"inteface"},{"m":"schedule.schedule_2","l":"model"},{"m":"schedule.schedule_2","l":"schedule.main"}];updateSearchResults();

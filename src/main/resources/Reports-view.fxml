@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="470.0" prefWidth="731.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsController">
+   <children>
+      <Label fx:id="TitleLabel" layoutX="346.0" layoutY="6.0" text="Reports" />
+      <TableView fx:id="ReportsTableView" layoutX="1.0" layoutY="71.0" prefHeight="229.0" prefWidth="730.0">
+        <columns>
+          <TableColumn fx:id="AppointmentID" prefWidth="75.0" text="Appointment_ID" />
+          <TableColumn fx:id="Title" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="Type" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="Description" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="Start" prefWidth="75.0" text="Start" />
+            <TableColumn fx:id="End" prefWidth="75.0" text="End" />
+            <TableColumn fx:id="CustomerID" prefWidth="75.0" text="Customer_ID" />
+            <TableColumn fx:id="Contact" prefWidth="75.0" text="Contact_ID" />
+        </columns>
+      </TableView>
+      <HBox layoutX="1.0" layoutY="298.0" prefHeight="54.0" prefWidth="566.0">
+         <children>
+            <Label fx:id="TotalDescriptionLabel" text="Total number of customer appointments by type and month:">
+               <HBox.margin>
+                  <Insets top="31.0" />
+               </HBox.margin></Label>
+            <GridPane prefHeight="50.0" prefWidth="170.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="MonthLabel" text="Month" />
+                  <Label fx:id="TypeLabel" text="Type" GridPane.columnIndex="1" />
+                  <Label fx:id="TotalTopLabel" text="Total" GridPane.columnIndex="2" />
+                  <ComboBox fx:id="MonthCombo" onAction="#onActionMonthCombo" prefWidth="150.0" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="1.0" />
+                     </GridPane.margin></ComboBox>
+                  <ComboBox fx:id="TypeCombo" onAction="#onActionTypeCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="1.0" />
+                     </GridPane.margin></ComboBox>
+                  <Label fx:id="TotalNumberLabel" prefHeight="19.0" prefWidth="54.0" style="-fx-border-color: black;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <Button layoutX="341.0" layoutY="415.0" mnemonicParsing="false" onAction="#onActionBack" text="Back" />
+      <HBox layoutX="240.0" layoutY="23.0" prefHeight="42.0" prefWidth="226.0">
+         <children>
+            <Label fx:id="ScheduleLabel" text="Schedule By Contact:">
+               <HBox.margin>
+                  <Insets right="2.0" />
+               </HBox.margin>
+            </Label>
+            <ComboBox fx:id="ScheduleCombo" onAction="#onActionScheduleCombo" prefHeight="25.0" prefWidth="86.0" />
+         </children>
+      </HBox>
+      <HBox layoutY="352.0" prefHeight="54.0" prefWidth="556.0">
+         <children>
+            <Label fx:id="TotalTimeFrameLabel" text="Customer appointments within selected time ? ">
+               <HBox.margin>
+                  <Insets top="18.0" />
+               </HBox.margin>
+            </Label>
+            <GridPane prefHeight="54.0" prefWidth="186.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="74.0" minWidth="10.0" prefWidth="72.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="65.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="53.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="TotalLabel" prefHeight="50.0" prefWidth="170.0" style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="1.0" />
+                     </GridPane.margin></Label>
+                  <Label text="Hour" />
+                  <ComboBox fx:id="HourCombo" onAction="#onActionTime" prefHeight="25.0" prefWidth="73.0" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="1.0" />
+                     </GridPane.margin></ComboBox>
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

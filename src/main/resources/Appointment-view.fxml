@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="732.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentController">
+   <children>
+      <TableView fx:id="CustomerTableView" onMouseClicked="#onMouseClickedCustomer" prefHeight="471.0" prefWidth="235.0">
+        <columns>
+          <TableColumn fx:id="CustomerName" prefWidth="234.0" text="Customer" />
+        </columns>
+      </TableView>
+      <AnchorPane layoutX="244.0" prefHeight="471.0" prefWidth="908.0">
+         <children>
+            <TableView fx:id="AppTableView" layoutX="334.0" layoutY="112.0" prefHeight="471.0" prefWidth="908.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columns>
+                <TableColumn fx:id="AppID" prefWidth="75.0" text="Appointment_ID" />
+                <TableColumn fx:id="Title" prefWidth="75.0" text="Title" />
+                  <TableColumn fx:id="Description" prefWidth="75.0" text="Description" />
+                  <TableColumn fx:id="Location" prefWidth="75.0" text="Location" />
+                  <TableColumn fx:id="Type" prefWidth="75.0" text="Type" />
+                  <TableColumn fx:id="Start" prefWidth="75.0" text="Start" />
+                  <TableColumn fx:id="End" prefWidth="75.0" text="End" />
+                  <TableColumn fx:id="CreateDate" prefWidth="75.0" text="Create_Date" />
+                  <TableColumn fx:id="LastUpdate" prefWidth="75.0" text="Last_Update" />
+                  <TableColumn fx:id="CustomerID" prefWidth="75.0" text="Customer_ID" />
+                  <TableColumn fx:id="UserID" prefWidth="75.0" text="User_ID" />
+                  <TableColumn fx:id="ContactID" prefWidth="75.0" text="Contact_ID" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <Button layoutX="1014.0" layoutY="480.0" mnemonicParsing="false" onAction="#onActionAdd" prefHeight="25.0" prefWidth="127.0" text="Add Appointment" />
+      <Button layoutX="1014.0" layoutY="515.0" mnemonicParsing="false" onAction="#onActionModify" text="Modify Appointment" />
+      <Button layoutX="1016.0" layoutY="551.0" mnemonicParsing="false" onAction="#onActionDelete" prefHeight="25.0" prefWidth="127.0" text="Delete Appointment" />
+      <Button layoutX="1059.0" layoutY="600.0" mnemonicParsing="false" onAction="#onActionBack" text="Back" />
+      <RadioButton fx:id="MonthlyButton" layoutX="1170.0" layoutY="45.0" mnemonicParsing="false" onAction="#onActionMonthly" text="Monthy" />
+      <RadioButton fx:id="WeeklyButton" layoutX="1171.0" layoutY="72.0" mnemonicParsing="false" onAction="#onActionWeekly" text="Weekly" />
+      <RadioButton fx:id="TotalButton" layoutX="1170.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionTotal" prefHeight="17.0" prefWidth="63.0" text="Total" />
+      <Button layoutX="84.0" layoutY="480.0" mnemonicParsing="false" onAction="#onActionReset" text="Reset" />
+   </children>
+</AnchorPane>
