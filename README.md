@@ -14,7 +14,7 @@ Managing JavaFX scenes for GUI development.
 
 Utilizing IntelliJ and SceneBuilder to visually design FXML files.
 
-Creating an a log.txt file to capture events, tracking incorrect user logins on login page. For instance, incorrect username or password event is captured with timestamp of event.
+Creating an a log.txt file to record events located in Resources as Login_Alert_Record.txt, tracking incorrect user logins on login page. For instance, incorrect username or password event is captured with timestamp of event.
 
 Creating models and mapping data to TableViews.
 
