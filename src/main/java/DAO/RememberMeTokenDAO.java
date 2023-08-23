@@ -24,4 +24,6 @@ public class RememberMeTokenDAO {
         }
     }
 //    Create a new method called generateAndInsertTokenForUser to generate and insert a new token into the database for a given user
+//    // Create a new method to generateToken
+
 }
