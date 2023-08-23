@@ -23,4 +23,5 @@ public class RememberMeTokenDAO {
             System.out.println("createNewTokenForUser Error: " + e.getMessage());
         }
     }
+//    Create a new method called generateAndInsertTokenForUser to generate and insert a new token into the database for a given user
 }
