@@ -43,11 +43,7 @@ public class DBConnection {
             connection = DriverManager.getConnection(url1, username, password);
             System.out.println("Connected to MySQL DataBase");
         }
-            catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            catch (SQLException e) {
+            catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
     }

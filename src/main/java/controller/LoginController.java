@@ -297,7 +297,7 @@ public class LoginController implements Initializable {
             String fileName = "Login_Alert_Record.txt";
             FileWriter fileWriter = new FileWriter(fileName, true);
             BufferedWriter writer = new BufferedWriter(fileWriter);
-            writer.append(getLoginAlert.getMessage(timeStampLocalZDTST) + " " + info + " " + "\n");
+            writer.append(getLoginAlert.getMessage(timeStampLocalZDTST)).append(" ").append(info).append(" ").append("\n");
             System.out.println("Login_Alert_Recorded");
             writer.flush();
             writer.close();

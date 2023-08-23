@@ -1,7 +1,8 @@
-module schedule.schedule_2 {
+module schedule.schedule_ {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires mysql.connector.j;
 
 
     opens schedule.main to javafx.fxml;
