@@ -155,7 +155,7 @@ public class LoginDaoImpl {
     }
 
     /**
-     * Validate Login of user with provided credentials in User Table of Database, Executes Query to validate username and password provided, return true if foud return false if not found
+     * Validate Login of user with provided credentials in User Table of Database, Executes Query to validate username and password provided, return true if found return false if not found
      * @param username Username to validate
      * @param password Password to validate
      * @return return true if found in Users table, return false if not found

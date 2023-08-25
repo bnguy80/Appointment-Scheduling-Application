@@ -3,6 +3,7 @@ package controller;
 import DAO.AppointmentsDaoImpl;
 import DAO.DBConnection;
 import DAO.LoginDaoImpl;
+import DAO.RememberMeTokenDAO;
 import inteface.GeneralInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -110,7 +111,13 @@ public class LoginController implements Initializable {
     private TextField PasswordFieldBox;
 
     /**
-     * List of scheduled appointmets of current user
+     * Remember Me Checkbox of Login Screen
+     */
+    @FXML
+    private CheckBox rememberMeCheckbox;
+
+    /**
+     * List of scheduled appointments of current user
      */
     ObservableList<Appointments> scheduledAppointments = FXCollections.observableArrayList();
 
@@ -339,7 +346,9 @@ public class LoginController implements Initializable {
             GlobalUsername.username = UsernameField.getText();
 
             ObservableList<Appointments> appointments = AppointmentsDaoImpl.getAppointmentFromUserId(userId);
-
+            if (rememberMeCheckbox.isSelected()) {
+                RememberMeTokenDAO.generateAndInsertTokenForUser(userId, username);
+            }
             if (appointments != null) {
                 getAppointment15MinList();
                 appointmentsFiltered();
