@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointments;
 import model.GlobalUsername;
+import model.RememberMeToken;
 import schedule.main.Main;
 
 import java.io.*;
@@ -120,6 +121,7 @@ public class LoginController implements Initializable {
      * List of scheduled appointments of current user
      */
     ObservableList<Appointments> scheduledAppointments = FXCollections.observableArrayList();
+
 
     /**
      * User ID of current user
@@ -348,6 +350,13 @@ public class LoginController implements Initializable {
             ObservableList<Appointments> appointments = AppointmentsDaoImpl.getAppointmentFromUserId(userId);
             if (rememberMeCheckbox.isSelected()) {
                 RememberMeTokenDAO.generateAndInsertTokenForUser(userId, username);
+                System.out.println("Remember Me Token Generated");
+
+                RememberMeToken token = RememberMeTokenDAO.getRememberMeTokenForUser(userId);
+//               if (token != null && RememberMeTokenDAO.isTokenValid(token)) {
+//
+//
+//               }
             }
             if (appointments != null) {
                 getAppointment15MinList();
@@ -360,10 +369,10 @@ public class LoginController implements Initializable {
             stage.show();
         }
         else {
-             if(validatePassword == false && validateUsername == true) {
+             if(!validatePassword && validateUsername) {
                 errorDialog(rs.getString("Error"), rs.getString("PasswordError"));
                 loginAlertTxt("Incorrect password: " + PasswordFieldBox.getText());
-            }else if(validateUsername == false && validatePassword == true) {
+            }else if(!validateUsername && validatePassword) {
                 errorDialog(rs.getString("Error"), rs.getString("UsernameError"));
                 loginAlertTxt("Incorrect username: " + UsernameField.getText());
             }

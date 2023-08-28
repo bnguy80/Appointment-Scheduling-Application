@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import model.RememberMeToken;
 
 import java.security.SecureRandom;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
@@ -30,7 +31,7 @@ public class RememberMeTokenDAO {
     // Create a new method called generateAndInsertTokenForUser to generate and insert a new token into the database for a given user
     public static void generateAndInsertTokenForUser(int userId, String username) {
         String token = generateRandomToken();
-        Timestamp expiresAt = Timestamp.valueOf(LocalDateTime.now().plusMinutes(1));
+        Timestamp expiresAt = Timestamp.valueOf(LocalDateTime.now().plusMinutes(10));
         insertNewTokenForUser(userId, username, token, expiresAt);
     }
     // Create a new method to generateRandomToken
@@ -40,5 +41,34 @@ public class RememberMeTokenDAO {
         secureRandom.nextBytes(tokenBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
     }
+    public static RememberMeToken getRememberMeTokenForUser(int userId) {
+        RememberMeToken rememberMeToken = null;
+        try {
+            String sql = "SELECT * FROM remember_me_tokens WHERE User_ID = ?";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                int tokenID = rs.getInt("Token_ID");
+                int userID = rs.getInt("User_ID");
+                String username = rs.getString("User_Name");
+                String token = rs.getString("Token");
+                Timestamp expiresAt = rs.getTimestamp("Expires_At");
+                LocalDateTime expiresAtCalendar = expiresAt.toLocalDateTime();
+                rememberMeToken = new RememberMeToken(tokenID, userID, username, token, expiresAtCalendar);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("getRememberMeTokenForUser Error: " + e.getMessage());
+        }
+        return rememberMeToken;
+    }
+
+    public static boolean isTokenValid(RememberMeToken token) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiresAt = token.getExpires_At();
+        return now.isBefore(expiresAt);
+    }
+
 
 }
