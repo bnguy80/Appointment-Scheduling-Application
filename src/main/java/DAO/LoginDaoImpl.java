@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class creates Users Database methods
@@ -141,7 +142,7 @@ public class LoginDaoImpl {
     public static boolean validatePassword(String password) {
         try {
             String sql = "SELECT * FROM users WHERE Password = '" + password + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {

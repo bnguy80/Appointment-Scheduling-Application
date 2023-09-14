@@ -31,9 +31,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static controller.MainMenuController.confirmDialog;
 import static controller.MainMenuController.errorDialog;
@@ -128,6 +126,7 @@ public class LoginController implements Initializable {
      */
     private static int currentUserId;
 
+
     /**
      * Get user ID of user logging in
      * @param actionEvent set currentUserId of current user
@@ -214,6 +213,8 @@ public class LoginController implements Initializable {
         }
     }
 
+    //Need to move to AppointmentsDaoImpl and return ObservableList<Appointments> appointments1
+    //Param should be current user
     /**
      * Get all appointments of current user, add to scheduledAppointments ObservableList to be checked in appointmentsFiltered()
      */
@@ -234,7 +235,7 @@ public class LoginController implements Initializable {
             /*String sql = "SELECT * FROM appointments WHERE Start BETWEEN '" + now + "' AND '" + now15 + "' AND " + "User_ID = '" + currentUser + "'";*/
 
             String sql = "SELECT * FROM appointments WHERE User_ID = '" + currentUserId + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -288,11 +289,11 @@ public class LoginController implements Initializable {
     /**
      * lambda expression return Login Alert @time
      */
-    GeneralInterface getLoginAlert = s -> "Login Invalid at: " + s;
+    GeneralInterface getLoginAlert = s -> "Login Alert at: " + s;
 
     /**
      * Create Login_Alert_Record.txt log file, inserts Timestamp and various errors for current user
-     * @param info
+     * @param info error message
      */
     public void loginAlertTxt(String info) {
         LocalDateTime now = LocalDateTime.now();
@@ -316,6 +317,15 @@ public class LoginController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
+    //Need to move to RememberMeTokenDAO
+    private boolean autoLoginIfValid(RememberMeToken token) throws IOException, SQLException {
+        if (RememberMeTokenDAO.isTokenValid(token)) {
+            GlobalUsername.username = token.getUsername();
+            loginAlertTxt("Login Valid");
+            return true;
+            }
+        return false;
+    }
 
     /**
      * Validates current user credentials stored in Database
@@ -324,39 +334,43 @@ public class LoginController implements Initializable {
      * @throws SQLException for getAppointmentFromUserId()
      * errorDialogs if login errors
      */
-    //"No username not working correctly rn"
     @FXML
     public void onActionLogin(ActionEvent actionEvent) throws IOException, SQLException {
 
         String username = UsernameField.getText();
         String password = PasswordFieldBox.getText();
 
-        boolean validateLogin = LoginDaoImpl.validateLogin(username, password);
-        boolean validateUsername = LoginDaoImpl.validateUsername(username);
-        boolean validatePassword = LoginDaoImpl.validatePassword(password);
+        boolean isValidLogin = LoginDaoImpl.validateLogin(username, password);
+        boolean isValidUsername = LoginDaoImpl.validateUsername(username);
+        boolean isValidPassword = LoginDaoImpl.validatePassword(password);
 
         int userId = LoginDaoImpl.getUserIdFromUsername(username);
-        currentUserId = LoginDaoImpl.getUserIdFromUsername(username);
+        currentUserId = userId;
 
-        if(password.isEmpty() || password.isBlank()) {
+        if(password.isEmpty()) {
             errorDialog(rs.getString("NoPassword"), "");
             loginAlertTxt("No password");
+        } else if(username.isEmpty()) {
+            errorDialog(rs.getString("NoUsername"), "");
+            loginAlertTxt("No username");
+        } else if (!isValidLogin) {
+            errorDialog(rs.getString("Error"), rs.getString("LoginError"));
+            loginAlertTxt("Incorrect login: " + username);
+        } else if(!isValidPassword) {
+            errorDialog(rs.getString("Error"), rs.getString("PasswordError"));
+            loginAlertTxt("Incorrect password: " + password);
+        } else if(!isValidUsername) {
+            errorDialog(rs.getString("Error"), rs.getString("UsernameError"));
+            loginAlertTxt("Incorrect username: " + username);
         }
-
-        //Problems between (No password & No username) & (Password Incorrect & Username Incorrect)
-        else if(validateLogin) {
+        //Problems between (No password & No username) & (Password Incorrect & Username Incorrect) 8/23/23 Should work now
+        if(isValidLogin) {
             GlobalUsername.username = UsernameField.getText();
 
             ObservableList<Appointments> appointments = AppointmentsDaoImpl.getAppointmentFromUserId(userId);
             if (rememberMeCheckbox.isSelected()) {
                 RememberMeTokenDAO.generateAndInsertTokenForUser(userId, username);
                 System.out.println("Remember Me Token Generated");
-
-                RememberMeToken token = RememberMeTokenDAO.getRememberMeTokenForUser(userId);
-//               if (token != null && RememberMeTokenDAO.isTokenValid(token)) {
-//
-//
-//               }
             }
             if (appointments != null) {
                 getAppointment15MinList();
@@ -367,19 +381,6 @@ public class LoginController implements Initializable {
             Parent scene = loader.load();
             stage.setScene(new Scene(scene));
             stage.show();
-        }
-        else {
-             if(!validatePassword && validateUsername) {
-                errorDialog(rs.getString("Error"), rs.getString("PasswordError"));
-                loginAlertTxt("Incorrect password: " + PasswordFieldBox.getText());
-            }else if(!validateUsername && validatePassword) {
-                errorDialog(rs.getString("Error"), rs.getString("UsernameError"));
-                loginAlertTxt("Incorrect username: " + UsernameField.getText());
-            }
-             else {
-                 errorDialog(rs.getString("Error"), rs.getString("LoginError"));
-                 loginAlertTxt("Login Error");
-             }
         }
     }
 
@@ -406,6 +407,20 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        RememberMeToken token = RememberMeTokenDAO.getRememberMeTokenForUser(currentUserId);
+        if (token != null) {
+            try {
+                if (autoLoginIfValid(token)) {
+                    rememberMeCheckbox.setSelected(true);
+                    if (GlobalUsername.username != null) {
+                        UsernameField.setText(GlobalUsername.username);
+                    }
+                }
+
+            } catch (IOException | SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         LocationAutoLabel.setText(tzs);
         LoginTitleLabel.setText(rs.getString("Title"));
         UsernameLabel.setText(rs.getString("Username"));
