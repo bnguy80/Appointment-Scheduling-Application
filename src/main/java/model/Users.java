@@ -66,7 +66,6 @@ public class Users {
 
     /**
      * Setters and Getters
-     * @return
      */
 
     public int getUserId() {
