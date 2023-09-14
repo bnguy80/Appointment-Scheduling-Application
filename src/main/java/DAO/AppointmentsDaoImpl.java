@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
+import java.util.Objects;
 
 /**
  * This class creates the Appointments database methods
@@ -26,7 +27,7 @@ public class AppointmentsDaoImpl {
         ObservableList<Type> appointmentType = FXCollections.observableArrayList();
         try {
             String sql = "SELECT DISTINCT Type From appointments";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -55,7 +56,7 @@ public class AppointmentsDaoImpl {
 
         try {
             String sql = "SELECT * FROM appointments";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -99,7 +100,7 @@ public class AppointmentsDaoImpl {
 
         try {
             String sql = "SELECT * FROM appointments";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -142,7 +143,7 @@ public class AppointmentsDaoImpl {
         int appCountResult = 0;
         try {
             String sql = "SELECT COUNT(*) AS appCount FROM appointments WHERE Customer_ID = '" + customerID + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -166,7 +167,7 @@ public class AppointmentsDaoImpl {
         int monthAppCount = 0;
         try {
             String sql = "SELECT COUNT(*) AS monthCount FROM appointments WHERE Type = '" + type + "'" + "AND MONTHNAME(Start) = '" + month + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -180,7 +181,7 @@ public class AppointmentsDaoImpl {
     }
 
     /**
-     * Create ObservableList of Appointments, Executes SQL Query to find all appointments with LocalDate of current month then add to monthlyap ObservableList
+     * Create ObservableList of Appointments, Executes SQL Query to find all appointments with LocalDate of current month then add to monthlyapp ObservableList
      * @return ObservableList monthlyApp of all appointments LocalDate current week
      * @throws SQLException for SQL Query
      */
@@ -191,7 +192,7 @@ public class AppointmentsDaoImpl {
             LocalDate start = LocalDate.now();
             LocalDate end = LocalDate.now().plusMonths(1);
             String sql = "SELECT * FROM appointments WHERE Start >='" +  start + "'" + "AND Start <='" + end + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -240,7 +241,7 @@ public class AppointmentsDaoImpl {
             LocalDate start = LocalDate.now();
             LocalDate end = LocalDate.now().plusWeeks(1);
             String sql = "SELECT * FROM appointments WHERE Start >='" +  start + "'" + "AND Start <='" + end + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -289,7 +290,7 @@ public class AppointmentsDaoImpl {
 
         try {
             String sql = "SELECT * FROM appointments WHERE User_ID = '" + userId + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -335,7 +336,7 @@ public class AppointmentsDaoImpl {
 
         try {
             String sql = "SELECT * FROM appointments WHERE Customer_ID ='" + customerId + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -379,7 +380,7 @@ public class AppointmentsDaoImpl {
 
         try {
             String sql = "SELECT * FROM appointments WHERE Contact_ID = '" + contactId + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -419,7 +420,7 @@ public class AppointmentsDaoImpl {
     public static boolean deleteAppointments(int id) {
         try {
             String sql = "DELETE FROM appointments WHERE Appointment_ID = " + id;
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             int update = ps.executeUpdate(sql);
             if(update == 1) {
                 return true;
@@ -439,7 +440,7 @@ public class AppointmentsDaoImpl {
     public static void deleteAppointmentsID(int customerId, int appointmentId) {
         try {
             String sql = "DELETE FROM appointments WHERE Customer_ID = '" + customerId + "'" +  "AND Appointment_ID = '" + appointmentId + "'";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ps.execute();
         }
         catch (SQLException e) {
@@ -466,7 +467,7 @@ public class AppointmentsDaoImpl {
     public static void addAppointments(String appTitle, String appDescription, String appLocation, String appType, Timestamp appStartTime, Timestamp appEndTime, Timestamp appCreateDate, String appCreatedBy, Timestamp lastUpdate, String appLastUpdatedBy, int customerId, int userId, int contactId) {
         try {
             String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ps.setString(1, appTitle);
             ps.setString(2, appDescription);
             ps.setString(3, appLocation);
@@ -507,7 +508,7 @@ public class AppointmentsDaoImpl {
     public static boolean modifyAppointments(int appID, String appTitle, String appDescription, String appLocation, String appType, Timestamp appStartTime, Timestamp appEndTime,  Timestamp lastUpdate, String appLastUpdatedBy, int customerId, int userId, int contactId) {
         try {
             String sql = "UPDATE appointments SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ? Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            PreparedStatement ps = Objects.requireNonNull(DBConnection.getConnection()).prepareStatement(sql);
             ps.setInt(1, appID);
             ps.setString(2, appTitle);
             ps.setString(3, appDescription);
